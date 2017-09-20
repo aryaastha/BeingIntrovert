@@ -1,4 +1,4 @@
-require('../util/constants');
+require('../public/js/constants');
 var express = require('express');
 var router = express.Router();
 
@@ -9,14 +9,15 @@ router.get('/', function (req, res, next) {
 
 function construct(io) {
     io.sockets.on(connection, function (socket) {
+        socket.on(registerRoom, function(room) {
+           socket.join(room);
+        });
         socket.emit("Start_Chat");
 
-        socket.on("Register_Name", function (data) {
-            io.sockets.emit("r_name", "<strong>" + data + "</strong> Has Joined The Chat");
-            //Now Listening To A Chat Message
-            socket.on("Send_msg", function (data) {
-                io.sockets.emit("msg", data);
-                //Now Listening To A Chat Message
+        socket.on(registerName, function (data) {
+            io.in(data.room).emit("r_name", "<strong>" + data.name + "</strong> Has Joined The Chat");
+            socket.on(sendMessage, function (data) {
+                io.in(data.room).emit(receiveMessage, "<strong>" + data.name + "</strong>: " + data.message);
             })
         })
     });
