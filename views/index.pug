@@ -1,0 +1,17 @@
+extends layout
+
+block content
+    h1= title
+    p Welcome to #{title}
+    p#stat <strong>Status:</strong>Not Connected
+    h2 Socket.io Chat Tutorial
+    ul
+    input(type="text", placeholder="Your Room..")#field
+    input(type="button", value="Go")#btn
+    input(type="hidden")#room
+    input(type="hidden")#name
+
+
+block scripts
+    script(src="/js/constants.js")
+    script(src="/js/script.js")
